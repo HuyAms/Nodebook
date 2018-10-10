@@ -5,6 +5,6 @@ CREATE TABLE note(
     "noteName" VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    "createAt" TIMESTAMP WITH TIME ZONE,
-    "updateAt" TIMESTAMP WITH TIME ZONE
+    "createdAt" TIMESTAMP WITH TIME ZONE,
+    "updatedAt" TIMESTAMP WITH TIME ZONE
 );

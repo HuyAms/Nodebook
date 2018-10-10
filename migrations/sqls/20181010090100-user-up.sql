@@ -8,6 +8,6 @@ CREATE TABLE "user" (
     email VARCHAR (355) NOT NULL UNIQUE,
     password VARCHAR (50) NOT NULL,
     role VARCHAR (50) CHECK (role in ('user', 'admin')),
-    "createAt" TIMESTAMP WITH TIME ZONE,
-    "updateAt" TIMESTAMP WITH TIME ZONE
+    "createdAt" TIMESTAMP WITH TIME ZONE,
+    "updatedAt" TIMESTAMP WITH TIME ZONE
 );
