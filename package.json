@@ -1,0 +1,26 @@
+{
+  "name": "nodebook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ts": "tsc -w",
+    "server": "nodemon ./build/index.js",
+    "start": "tsc && node ./build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "helmet": "^3.14.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.4",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.2"
+  }
+}
