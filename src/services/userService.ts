@@ -5,15 +5,17 @@ import {sequelize} from '../server';
 import APIError from "../util/apiError";
 import AuthService from './authService';
 
-class UserService {
+export default class UserService {
 
-  public insertUser(user: CreateUserParams): Promise<TokenAttributes> {
+  static insertUser(user: CreateUserParams): Promise<TokenAttributes> {
 
     return sequelize.transaction((transaction) => {
 
       return User.create(user, {transaction}).then((user: User) => {
 
-        return this.createTokenResponse(user)
+        const token = AuthService.createTokenResponse(user)
+
+        return {token}
 
       }).catch((err) =>{
 
@@ -21,20 +23,4 @@ class UserService {
       })
     })
   }
-
-  public createTokenResponse(user: User): TokenAttributes {
-
-    const userAttribute = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-      role: user.role
-    }
-
-    return {token: AuthService.createToken(userAttribute)}
-  }
 }
-
-export default new UserService()

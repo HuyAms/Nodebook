@@ -12,7 +12,3 @@ export interface UserAttributes {
 export interface CreateUserParams extends UserAttributes {
   password: string
 }
-
-export interface TokenAttributes {
-  token: string
-}

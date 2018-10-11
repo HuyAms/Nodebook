@@ -59,6 +59,10 @@ export default class UserModel extends Model<UserModel> {
   @Column({type: DataType.STRING})
   role: UserRole;
 
+  public authenticate(plainTextPword: string): boolean {
+    return bcrypt.compareSync(plainTextPword, this.password);
+  }
+
   private hashPassword(plainTextPword: string): string {
     if (!plainTextPword) {
       return '';

@@ -1,5 +1,5 @@
-import userService from '../services/userService'
-import responseService from '../services/responseService'
+import UserService from '../services/userService'
+import ResponseService from '../services/responseService'
 
 export default class UserController {
 
@@ -7,8 +7,8 @@ export default class UserController {
 
     const object = req.body
 
-    userService.insertUser(object)
-      .then(result => res.send(responseService.successResponse(result)))
+    UserService.insertUser(object)
+      .then(result => res.send(ResponseService.successResponse(result)))
       .catch(next)
   }
 

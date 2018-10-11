@@ -23,6 +23,9 @@ let UserModel = class UserModel extends sequelize_typescript_1.Model {
     set password(value) {
         this.setDataValue('password', this.hashPassword(value));
     }
+    authenticate(plainTextPword) {
+        return bcrypt.compareSync(plainTextPword, this.password);
+    }
     hashPassword(plainTextPword) {
         if (!plainTextPword) {
             return '';
