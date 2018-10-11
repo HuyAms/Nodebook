@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const routers_1 = require("./routes/routers");
 const sequelize_typescript_1 = require("sequelize-typescript");
+const responseService_1 = require("./services/responseService");
 class Server {
     constructor() {
         this.app = express();
@@ -22,6 +23,10 @@ class Server {
     }
     routes() {
         this.app.use('/api/', routers_1.default);
+        //Handle Error
+        this.app.use((err, req, res, next) => {
+            res.status(err.status).json(responseService_1.default.failureResponse(err));
+        });
     }
     connectDatabase() {
         this.sequelize = new sequelize_typescript_1.Sequelize({

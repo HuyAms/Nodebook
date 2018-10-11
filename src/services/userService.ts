@@ -1,7 +1,8 @@
 import * as Promise from 'bluebird';
 import {CreateUserParams, UserAttributes} from '../models/interface/userInterface';
-import User, {UserRole} from '../models/userModel';
+import User from '../models/userModel';
 import {sequelize} from '../server';
+import APIError from "../util/apiError";
 
 class UserService {
 
@@ -11,7 +12,7 @@ class UserService {
       return User.create(user).then((user: User) => {
         return this.createUserAttributes(user)
       }).catch((err) =>{
-         throw Error(err.errors[0].message)
+         throw APIError.badRequestError(err.errors[0].message)
       })
     })
   }

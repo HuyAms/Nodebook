@@ -10,6 +10,7 @@ class ResponseService {
     ;
     static failureResponse(error) {
         return {
+            'status': error.status,
             'message': error.message
         };
     }

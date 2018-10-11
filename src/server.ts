@@ -4,6 +4,8 @@ import * as morgan from 'morgan'
 import * as cors from 'cors'
 import router from './routes/routers'
 import {Sequelize} from 'sequelize-typescript';
+import responseService from "./services/responseService";
+import APIError from "./util/apiError";
 
 
 class Server {
@@ -32,6 +34,11 @@ class Server {
   private routes(): void {
 
     this.app.use('/api/', router);
+
+    //Handle Error
+    this.app.use((err: APIError, req, res, next) => {
+      res.status(err.status).json(responseService.failureResponse(err))
+    });
   }
 
   private connectDatabase() {

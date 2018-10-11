@@ -7,7 +7,7 @@ class UserController {
         const object = req.body;
         userService_1.default.insertUser(object)
             .then(result => res.send(responseService_1.default.successResponse(result)))
-            .catch(error => res.send(responseService_1.default.failureResponse(error)));
+            .catch(next);
     }
 }
 exports.default = UserController;

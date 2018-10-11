@@ -9,7 +9,7 @@ export default class UserController {
 
     userService.insertUser(object)
       .then(result => res.send(responseService.successResponse(result)))
-      .catch(error => res.send(responseService.failureResponse(error)))
+      .catch(next)
   }
 
 }
