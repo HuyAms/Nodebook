@@ -6,7 +6,7 @@ CREATE TABLE "user" (
     "lastName" VARCHAR (50) NOT NULL,
     "username" VARCHAR (50) NOT NULL UNIQUE,
     email VARCHAR (355) NOT NULL UNIQUE,
-    password VARCHAR (50) NOT NULL,
+    password TEXT NOT NULL,
     role VARCHAR (50) CHECK (role in ('user', 'admin')),
     "createdAt" TIMESTAMP WITH TIME ZONE,
     "updatedAt" TIMESTAMP WITH TIME ZONE

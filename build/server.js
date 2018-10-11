@@ -4,9 +4,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
+const passport = require("passport");
 const routers_1 = require("./routes/routers");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const responseService_1 = require("./services/responseService");
+const config_1 = require("./config/config");
 class Server {
     constructor() {
         this.app = express();
@@ -19,6 +21,7 @@ class Server {
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(bodyParser.json());
         app.use(morgan('dev'));
+        app.use(passport.initialize());
         this.app.use(cors());
     }
     routes() {
@@ -29,13 +32,7 @@ class Server {
         });
     }
     connectDatabase() {
-        this.sequelize = new sequelize_typescript_1.Sequelize({
-            database: 'note',
-            dialect: 'postgres',
-            username: 'me',
-            password: 'me123',
-            modelPaths: [__dirname + '/models']
-        });
+        this.sequelize = new sequelize_typescript_1.Sequelize(config_1.default.db);
     }
     getSequelize() {
         return this.sequelize;

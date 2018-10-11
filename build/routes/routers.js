@@ -11,9 +11,6 @@ class Router {
     setUpRouter() {
         const router = this.router;
         router.post('/user', this.userController.post);
-        router.get('/user', (req, res) => {
-            res.json({ "user": "testUser" });
-        });
     }
 }
 exports.default = new Router().router;

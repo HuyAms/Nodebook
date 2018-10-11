@@ -10,12 +10,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
+const bcrypt = require("bcryptjs");
 var UserRole;
 (function (UserRole) {
     UserRole["Admin"] = "admin";
     UserRole["User"] = "user";
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
 let UserModel = class UserModel extends sequelize_typescript_1.Model {
+    get password() {
+        return this.getDataValue('password');
+    }
+    set password(value) {
+        this.setDataValue('password', this.hashPassword(value));
+    }
+    hashPassword(plainTextPword) {
+        if (!plainTextPword) {
+            return '';
+        }
+        else {
+            const salt = bcrypt.genSaltSync(10);
+            return bcrypt.hashSync(plainTextPword, salt);
+        }
+    }
 };
 __decorate([
     sequelize_typescript_1.PrimaryKey,
@@ -50,8 +66,9 @@ __decorate([
 __decorate([
     sequelize_typescript_1.AllowNull(false),
     sequelize_typescript_1.Column({ type: sequelize_typescript_1.DataType.STRING }),
-    __metadata("design:type", String)
-], UserModel.prototype, "password", void 0);
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], UserModel.prototype, "password", null);
 __decorate([
     sequelize_typescript_1.AllowNull(false),
     sequelize_typescript_1.Column({ type: sequelize_typescript_1.DataType.STRING }),

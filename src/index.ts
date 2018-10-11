@@ -1,11 +1,12 @@
 import * as debug from 'debug';
 import * as http from 'http';
+import config from './config/config';
 
 import Server from './server';
 
 debug('ts-express:index');
 
-const port = normalizePort(process.env.PORT || 8000);
+const port = normalizePort(config.port);
 Server.set('port', port);
 
 console.log(`Server listening on port ${port}`);

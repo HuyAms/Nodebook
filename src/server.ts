@@ -1,12 +1,13 @@
-import * as express from 'express';
+import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
+import * as passport from 'passport'
 import router from './routes/routers'
-import {Sequelize} from 'sequelize-typescript';
-import responseService from "./services/responseService";
-import APIError from "./util/apiError";
-
+import {Sequelize} from 'sequelize-typescript'
+import responseService from "./services/responseService"
+import APIError from './util/apiError'
+import config from './config/config'
 
 class Server {
 
@@ -28,6 +29,7 @@ class Server {
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(bodyParser.json());
     app.use(morgan('dev'));
+    app.use(passport.initialize())
     this.app.use(cors());
   }
 
@@ -42,13 +44,7 @@ class Server {
   }
 
   private connectDatabase() {
-     this.sequelize = new Sequelize({
-      database: 'note',
-      dialect: 'postgres',
-      username: 'me',
-      password: 'me123',
-      modelPaths: [__dirname + '/models']
-    });
+     this.sequelize = new Sequelize(config.db)
   }
 
   getSequelize() {

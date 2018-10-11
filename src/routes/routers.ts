@@ -18,10 +18,6 @@ class Router {
     const router = this.router
 
     router.post('/user', this.userController.post)
-
-    router.get('/user', (req, res) => {
-      res.json({"user":"testUser"})
-    })
   }
 }
 

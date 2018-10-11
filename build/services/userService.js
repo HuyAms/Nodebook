@@ -3,18 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = require("../models/userModel");
 const server_1 = require("../server");
 const apiError_1 = require("../util/apiError");
+const authService_1 = require("./authService");
 class UserService {
     insertUser(user) {
         return server_1.sequelize.transaction((transaction) => {
-            return userModel_1.default.create(user).then((user) => {
-                return this.createUserAttributes(user);
+            return userModel_1.default.create(user, { transaction }).then((user) => {
+                return this.createTokenResponse(user);
             }).catch((err) => {
                 throw apiError_1.default.badRequestError(err.errors[0].message);
             });
         });
     }
-    createUserAttributes(user) {
-        return {
+    createTokenResponse(user) {
+        const userAttribute = {
             id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -22,6 +23,7 @@ class UserService {
             username: user.username,
             role: user.role
         };
+        return { token: authService_1.default.createToken(userAttribute) };
     }
 }
 exports.default = new UserService();

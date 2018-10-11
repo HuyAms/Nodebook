@@ -1,24 +1,30 @@
 import * as Promise from 'bluebird';
-import {CreateUserParams, UserAttributes} from '../models/interface/userInterface';
+import {CreateUserParams, UserAttributes, TokenAttributes} from '../models/interface/userInterface';
 import User from '../models/userModel';
 import {sequelize} from '../server';
 import APIError from "../util/apiError";
+import AuthService from './authService';
 
 class UserService {
 
-  public insertUser(user: CreateUserParams): Promise<UserAttributes> {
+  public insertUser(user: CreateUserParams): Promise<TokenAttributes> {
 
     return sequelize.transaction((transaction) => {
-      return User.create(user).then((user: User) => {
-        return this.createUserAttributes(user)
+
+      return User.create(user, {transaction}).then((user: User) => {
+
+        return this.createTokenResponse(user)
+
       }).catch((err) =>{
+
          throw APIError.badRequestError(err.errors[0].message)
       })
     })
   }
 
-  public createUserAttributes(user: User): UserAttributes {
-    return {
+  public createTokenResponse(user: User): TokenAttributes {
+
+    const userAttribute = {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -26,6 +32,8 @@ class UserService {
       username: user.username,
       role: user.role
     }
+
+    return {token: AuthService.createToken(userAttribute)}
   }
 }
 

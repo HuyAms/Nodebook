@@ -7,8 +7,10 @@ import {
   IsEmail,
   AllowNull,
   Unique,
+  BeforeCreate,
   DataType
-} from 'sequelize-typescript';
+} from 'sequelize-typescript'
+import * as bcrypt from 'bcryptjs'
 
 export enum UserRole {
   Admin = 'admin',
@@ -45,9 +47,24 @@ export default class UserModel extends Model<UserModel> {
 
   @AllowNull(false)
   @Column({type: DataType.STRING})
-  password: string;
+  get password(): string {
+    return this.getDataValue('password')
+  }
+
+  set password(value: string) {
+    this.setDataValue('password', this.hashPassword(value))
+  }
 
   @AllowNull(false)
   @Column({type: DataType.STRING})
   role: UserRole;
+
+  private hashPassword(plainTextPword: string): string {
+    if (!plainTextPword) {
+      return '';
+    } else {
+      const salt = bcrypt.genSaltSync(10);
+      return bcrypt.hashSync(plainTextPword, salt);
+    }
+  }
 }

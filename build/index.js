@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const debug = require("debug");
 const http = require("http");
+const config_1 = require("./config/config");
 const server_1 = require("./server");
 debug('ts-express:index');
-const port = normalizePort(process.env.PORT || 8000);
+const port = normalizePort(config_1.default.port);
 server_1.default.set('port', port);
 console.log(`Server listening on port ${port}`);
 const index = http.createServer(server_1.default);
