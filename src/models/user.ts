@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcryptjs'
+import NoteModel from "./note";
 import {
   Table,
   Column,
@@ -7,10 +9,9 @@ import {
   IsEmail,
   AllowNull,
   Unique,
-  BeforeCreate,
+  HasMany,
   DataType
 } from 'sequelize-typescript'
-import * as bcrypt from 'bcryptjs'
 
 export enum UserRole {
   Admin = 'admin',
@@ -58,6 +59,9 @@ export default class UserModel extends Model<UserModel> {
   @AllowNull(false)
   @Column({type: DataType.STRING})
   role: UserRole;
+
+  @HasMany(() => NoteModel)
+  notes: NoteModel[];
 
   public authenticate(plainTextPword: string): boolean {
     return bcrypt.compareSync(plainTextPword, this.password);

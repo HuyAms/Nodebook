@@ -1,4 +1,4 @@
-import {UserRole} from "../userModel";
+import {UserRole} from "../user";
 
 export interface UserAttributes {
   id?: number

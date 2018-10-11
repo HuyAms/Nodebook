@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const userModel_1 = require("../models/userModel");
+const user_1 = require("../models/user");
 const expressJwt = require("express-jwt");
 const jwt = require("jsonwebtoken");
 const config_1 = require("../config/config");
@@ -10,7 +10,7 @@ const Local = require("passport-local");
 const LocalStrategy = Local.Strategy;
 const apiError_1 = require("../util/apiError");
 passport.use(new LocalStrategy((username, password, done) => {
-    userModel_1.default.findOne({ where: { username: username } })
+    user_1.default.findOne({ where: { username: username } })
         .then((user) => {
         if (!user) {
             return done(undefined, false);
