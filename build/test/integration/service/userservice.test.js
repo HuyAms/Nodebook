@@ -8,11 +8,11 @@ const dbUtil = require("../../util/db");
 const user_1 = require("../../../src/models/user");
 const httpStatus = require('http-status');
 const expect = chai.expect;
-describe('userService', () => {
+describe('[USER SERVICE]', () => {
     before(done => {
         dbUtil.clearDB().finally(done);
     });
-    describe('createUser', () => {
+    describe('[CREATE USER]', () => {
         it('should create user with all required fields', () => {
             const mockUser = mock_1.createUser();
             return userService_1.default.insertUser(mockUser)

@@ -9,11 +9,11 @@ const expect = chai.expect;
 const omitFields = ['id', 'password', 'createdAt', 'updatedAt'];
 const requiredFields = ['username', 'firstName', 'lastName', 'email', 'role'];
 const uniqueFields = ['username', 'email'];
-describe('user model', () => {
+describe('[USER MODEL]', () => {
     before(done => {
         dbUtil.clearDB().finally(done);
     });
-    describe('create', () => {
+    describe('[CREATE]', () => {
         it('should create user with valid data', () => {
             const mockUser = mock_1.createUser(user_1.UserRole.User);
             return dbUtil.addUser(mockUser)
@@ -47,7 +47,7 @@ describe('user model', () => {
         }
         uniqueFields.forEach(testAddUniqueFields);
     });
-    describe('update', () => {
+    describe('[UPDATE]', () => {
         let user;
         beforeEach(() => {
             const mockUser = mock_1.createUser();
