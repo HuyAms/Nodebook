@@ -8,11 +8,11 @@ import {
   BelongsToMany,
   DataType
 } from 'sequelize-typescript'
-import NotebookModel from "./notebook";
-import NoteNotebookModel from "./noteNoteBook";
+import Notebook from "./notebook";
+import NoteNotebook from "./noteNoteBook";
 
-@Table({tableName: 'note', modelName: 'NoteModel', timestamps: true})
-export default class NoteModel extends Model<NoteModel> {
+@Table({tableName: 'note', modelName: 'Note', timestamps: true})
+export default class Note extends Model<Note> {
 
   @PrimaryKey
   @AutoIncrement
@@ -32,6 +32,6 @@ export default class NoteModel extends Model<NoteModel> {
   @Column({type: DataType.STRING})
   content: string;
 
-  @BelongsToMany(() => NotebookModel, () => NoteNotebookModel)
-  noteBooks: NotebookModel[];
+  @BelongsToMany(() => Notebook, () => NoteNotebook)
+  noteBooks: Notebook[];
 }

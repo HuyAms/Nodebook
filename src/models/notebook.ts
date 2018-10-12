@@ -1,4 +1,4 @@
-import UserModel from "./user";
+import User from "./user";
 import {
   Table,
   Column,
@@ -7,13 +7,13 @@ import {
   AutoIncrement,
   AllowNull,
   BelongsTo,
-  DataType, BelongsToMany
+  DataType, BelongsToMany, ForeignKey
 } from 'sequelize-typescript'
-import NoteNotebookModel from "./noteNoteBook";
-import NoteModel from "./note";
+import noteNotebook from "./noteNoteBook";
+import Note from "./note";
 
-@Table({tableName: 'notebook', modelName: 'NotebookModel', timestamps: true})
-export default class NotebookModel extends Model<NotebookModel> {
+@Table({tableName: 'notebook', modelName: 'Notebook', timestamps: true})
+export default class Notebook extends Model<Notebook> {
 
   @PrimaryKey
   @AutoIncrement
@@ -21,9 +21,18 @@ export default class NotebookModel extends Model<NotebookModel> {
   @Column({type: DataType.INTEGER})
   id: number
 
-  @BelongsTo(() => UserModel)
-  user: UserModel;
+  @AllowNull(false)
+  @Column({type: DataType.STRING})
+  notebookName: string;
 
-  @BelongsToMany(() => NoteModel, () => NoteNotebookModel)
-  notes: NoteModel[];
+  @AllowNull(false)
+  @ForeignKey(() => User)
+  @Column({type: DataType.INTEGER})
+  userId: number
+
+  @BelongsTo(() => User)
+  user: User
+
+  @BelongsToMany(() => Note, () => noteNotebook)
+  notes: Note[]
 }

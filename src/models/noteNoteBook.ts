@@ -2,19 +2,21 @@ import {
   Table,
   Column,
   Model,
-  ForeignKey
+  ForeignKey, AllowNull
 } from 'sequelize-typescript'
-import NoteModel from "./note";
-import NotebookModel from "./notebook";
+import Note from "./note";
+import Notebook from "./notebook";
 
-@Table({tableName: 'note_notebook', modelName: 'NoteNotebookModel', timestamps: true})
-export default class NoteNotebookModel extends Model<NoteNotebookModel> {
+@Table({tableName: 'note_notebook', modelName: 'NoteNotebook', timestamps: true})
+export default class NoteNotebook extends Model<NoteNotebook> {
 
-  @ForeignKey(() => NoteModel)
+  @AllowNull(false)
+  @ForeignKey(() => Note)
   @Column
   noteId: number;
 
-  @ForeignKey(() => NotebookModel)
+  @AllowNull(false)
+  @ForeignKey(() => Notebook)
   @Column
   notebookId: number;
 }

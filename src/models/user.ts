@@ -1,5 +1,4 @@
 import * as bcrypt from 'bcryptjs'
-import NoteModel from "./note";
 import {
   Table,
   Column,
@@ -12,14 +11,15 @@ import {
   HasMany,
   DataType
 } from 'sequelize-typescript'
+import Notebook from "./notebook";
 
 export enum UserRole {
   Admin = 'admin',
   User = 'user'
 }
 
-@Table({tableName: 'user', modelName: 'UserModel', timestamps: true})
-export default class UserModel extends Model<UserModel> {
+@Table({tableName: 'user', modelName: 'User', timestamps: true})
+export default class User extends Model<User> {
 
   @PrimaryKey
   @AutoIncrement
@@ -60,8 +60,8 @@ export default class UserModel extends Model<UserModel> {
   @Column({type: DataType.STRING})
   role: UserRole;
 
-  @HasMany(() => NoteModel)
-  notes: NoteModel[];
+  @HasMany(() => Notebook)
+  notebooks: Notebook[];
 
   public authenticate(plainTextPword: string): boolean {
     return bcrypt.compareSync(plainTextPword, this.password);

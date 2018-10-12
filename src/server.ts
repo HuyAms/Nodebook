@@ -43,7 +43,7 @@ class Server {
     });
   }
 
-  private connectDatabase() {
+  connectDatabase() {
      this.sequelize = new Sequelize(config.db)
   }
 
@@ -51,6 +51,6 @@ class Server {
     return this.sequelize
   }
 }
-const server = new Server()
+export const server = new Server()
 export default server.app
 export const sequelize = server.getSequelize()

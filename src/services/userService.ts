@@ -1,5 +1,5 @@
 import * as Promise from 'bluebird';
-import {CreateUserParams, UserAttributes, TokenAttributes} from '../models/interface/userInterface';
+import {CreateUserParams, TokenAttributes} from '../models/interface/userInterface';
 import User from '../models/user';
 import {sequelize} from '../server';
 import APIError from "../util/apiError";
