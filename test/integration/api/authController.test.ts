@@ -1,10 +1,7 @@
 import * as chai from 'chai'
 import chaiHttp = require('chai-http')
-import * as _ from 'lodash'
-import {createUser} from '../../util/mock'
-import UserService from '../../../src/services/userService'
+import {createMockUser} from '../../util/mock'
 import * as dbUtil from "../../util/db";
-import {UserRole} from "../../../src/models/user"
 import {agent} from "../../util/common";
 const httpStatus = require('http-status');
 
@@ -14,14 +11,14 @@ chai.use(chaiHttp)
 
 const chaiAgent = agent()
 
-describe('[/login]', () => {
+describe('[LOGIN API]', () => {
 
   let testUser
   let testPassword
 
   beforeEach(function() {
 
-    const mockUser = createUser()
+    const mockUser = createMockUser()
     testPassword = mockUser.password
 
     return dbUtil.addUser(mockUser)
@@ -32,9 +29,9 @@ describe('[/login]', () => {
     dbUtil.clearDB()
   })
 
-  describe('[/api/login]', () => {
+  describe('POST /api/login', () => {
 
-    it('should return token when login user with username and password', () => {
+    it('Send username and password. Expect return 200 with token', () => {
 
       const loginParams = {
         username: testUser.username,
@@ -49,6 +46,46 @@ describe('[/login]', () => {
           const {token} = res.body.data
 
           expect(token).to.be.a('string')
+        })
+    })
+
+    it('Send incorrect username. Expect return 401 with error message', () => {
+
+      const mockUser = createMockUser()
+
+      const loginParams = {
+        username: testUser.username,
+        password: mockUser.password
+      }
+
+      return chaiAgent.post('/api/login')
+        .send(loginParams)
+        .then(res => {
+          expect(res).to.have.status(httpStatus.UNAUTHORIZED)
+
+          const {message} = res.body
+
+          expect(message).to.be.a('string')
+        })
+    })
+
+    it('Send incorrect password. Expect return 401 with error message', () => {
+
+      const mockUser = createMockUser()
+
+      const loginParams = {
+        username: mockUser.username,
+        password: testUser.password
+      }
+
+      return chaiAgent.post('/api/login')
+        .send(loginParams)
+        .then(res => {
+          expect(res).to.have.status(httpStatus.UNAUTHORIZED)
+
+          const {message} = res.body
+
+          expect(message).to.be.a('string')
         })
     })
   })

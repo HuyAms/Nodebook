@@ -1,7 +1,7 @@
 import * as faker from 'faker'
 import {UserRole} from '../../src/models/user'
 
-export const createUser = (role?: UserRole) => {
+export const createMockUser = (role?: UserRole) => {
 
   const firstName = faker.name.firstName()
   const lastName = faker.name.lastName()

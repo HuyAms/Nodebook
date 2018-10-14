@@ -1,6 +1,6 @@
 import * as chai from 'chai'
 import * as _ from 'lodash'
-import {createUser} from '../../util/mock'
+import {createMockUser} from '../../util/mock'
 import UserService from '../../../src/services/userService'
 import * as dbUtil from "../../util/db";
 import {UserRole} from "../../../src/models/user";
@@ -8,6 +8,8 @@ import {UserRole} from "../../../src/models/user";
 const httpStatus = require('http-status');
 
 const expect = chai.expect
+
+const requiredFields = ['username', 'firstName', 'lastName', 'email', 'role']
 
 describe('[USER SERVICE]', () => {
 
@@ -19,7 +21,7 @@ describe('[USER SERVICE]', () => {
 
     it('should create user with all required fields', () => {
 
-      const mockUser = createUser()
+      const mockUser = createMockUser()
 
       return UserService.insertUser(mockUser)
         .then(result => {
@@ -32,7 +34,7 @@ describe('[USER SERVICE]', () => {
 
       it('show throw error due to missing field ' + missingField, () => {
 
-        let mockUser = createUser(UserRole.User)
+        let mockUser = createMockUser(UserRole.User)
         mockUser = _.omit(mockUser, missingField)
 
         return UserService.insertUser(mockUser)
@@ -41,7 +43,7 @@ describe('[USER SERVICE]', () => {
       })
     }
 
-    ['username', 'firstName', 'lastName', 'email', 'role'].forEach(testMissingFields)
+    requiredFields.forEach(testMissingFields)
   })
 
 })

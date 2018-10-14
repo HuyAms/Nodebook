@@ -15,7 +15,7 @@ describe('[USER MODEL]', () => {
     });
     describe('[CREATE]', () => {
         it('should create user with valid data', () => {
-            const mockUser = mock_1.createUser(user_1.UserRole.User);
+            const mockUser = mock_1.createMockUser(user_1.UserRole.User);
             return dbUtil.addUser(mockUser)
                 .then(user => {
                 expect(user).to.be.exist;
@@ -25,7 +25,7 @@ describe('[USER MODEL]', () => {
         });
         function testAddMissingFields(missingField) {
             it('show throw error due to creating user with missing field ' + missingField, () => {
-                let mockUser = mock_1.createUser(user_1.UserRole.User);
+                let mockUser = mock_1.createMockUser(user_1.UserRole.User);
                 mockUser = _.omit(mockUser, missingField);
                 return dbUtil.addUser(mockUser)
                     .then(user => expect(user).not.to.be.exist)
@@ -35,7 +35,7 @@ describe('[USER MODEL]', () => {
         requiredFields.forEach(testAddMissingFields);
         function testAddUniqueFields(uniqueField) {
             it('show throw error due to violating unique field ' + uniqueField, () => {
-                let mockUser = mock_1.createUser(user_1.UserRole.User);
+                let mockUser = mock_1.createMockUser(user_1.UserRole.User);
                 return dbUtil.addUser(mockUser)
                     .then(user => {
                     const anotherUser = Object.assign({}, user);
@@ -50,7 +50,7 @@ describe('[USER MODEL]', () => {
     describe('[UPDATE]', () => {
         let user;
         beforeEach(() => {
-            const mockUser = mock_1.createUser();
+            const mockUser = mock_1.createMockUser();
             return dbUtil.addUser(mockUser)
                 .then(instance => user = instance);
         });
@@ -58,7 +58,7 @@ describe('[USER MODEL]', () => {
             return dbUtil.clearDB();
         });
         it('should update user with valid data', () => {
-            const mockUser = mock_1.createUser();
+            const mockUser = mock_1.createMockUser();
             user = _.merge(user, mockUser);
             user.save()
                 .then(instance => {
@@ -79,7 +79,7 @@ describe('[USER MODEL]', () => {
         requiredFields.forEach(testUpdateMissingFields);
         function testUpdateUniqueField(uniqueField) {
             it('show throw error due to violating unique field ' + uniqueField, () => {
-                let mockUser = mock_1.createUser(user_1.UserRole.User);
+                let mockUser = mock_1.createMockUser(user_1.UserRole.User);
                 user[uniqueField] = mockUser[uniqueField];
                 user.save()
                     .then(instance => expect(instance).not.to.be.exist)

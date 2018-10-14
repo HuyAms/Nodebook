@@ -8,13 +8,14 @@ const dbUtil = require("../../util/db");
 const user_1 = require("../../../src/models/user");
 const httpStatus = require('http-status');
 const expect = chai.expect;
+const requiredFields = ['username', 'firstName', 'lastName', 'email', 'role'];
 describe('[USER SERVICE]', () => {
     before(done => {
         dbUtil.clearDB().finally(done);
     });
     describe('[CREATE USER]', () => {
         it('should create user with all required fields', () => {
-            const mockUser = mock_1.createUser();
+            const mockUser = mock_1.createMockUser();
             return userService_1.default.insertUser(mockUser)
                 .then(result => {
                 expect(result.token).to.be.a('string');
@@ -22,14 +23,14 @@ describe('[USER SERVICE]', () => {
         });
         function testMissingFields(missingField) {
             it('show throw error due to missing field ' + missingField, () => {
-                let mockUser = mock_1.createUser(user_1.UserRole.User);
+                let mockUser = mock_1.createMockUser(user_1.UserRole.User);
                 mockUser = _.omit(mockUser, missingField);
                 return userService_1.default.insertUser(mockUser)
                     .then(result => expect(result).not.to.be.exist)
                     .catch(error => expect(error.status).to.be.equal(httpStatus.BAD_REQUEST));
             });
         }
-        ['username', 'firstName', 'lastName', 'email', 'role'].forEach(testMissingFields);
+        requiredFields.forEach(testMissingFields);
     });
 });
-//# sourceMappingURL=userservice.test.js.map
+//# sourceMappingURL=userService.test.js.map

@@ -1,6 +1,6 @@
 import * as chai from 'chai'
 import * as dbUtil from "../util/db";
-import {createUser} from "../util/mock";
+import {createMockUser} from "../util/mock";
 import * as _ from 'lodash'
 import {UserRole} from "../../src/models/user";
 
@@ -20,7 +20,7 @@ describe('[USER MODEL]', () => {
 
     it('should create user with valid data', () => {
 
-      const mockUser = createUser(UserRole.User)
+      const mockUser = createMockUser(UserRole.User)
 
       return dbUtil.addUser(mockUser)
         .then(user => {
@@ -34,7 +34,7 @@ describe('[USER MODEL]', () => {
 
       it('show throw error due to creating user with missing field ' + missingField, () => {
 
-        let mockUser = createUser(UserRole.User)
+        let mockUser = createMockUser(UserRole.User)
         mockUser = _.omit(mockUser, missingField)
 
         return dbUtil.addUser(mockUser)
@@ -50,7 +50,7 @@ describe('[USER MODEL]', () => {
 
       it('show throw error due to violating unique field ' + uniqueField, () => {
 
-        let mockUser = createUser(UserRole.User)
+        let mockUser = createMockUser(UserRole.User)
 
         return dbUtil.addUser(mockUser)
           .then(user => {
@@ -73,7 +73,7 @@ describe('[USER MODEL]', () => {
 
     beforeEach(() => {
 
-      const mockUser = createUser()
+      const mockUser = createMockUser()
 
       return dbUtil.addUser(mockUser)
         .then(instance => user = instance)
@@ -85,7 +85,7 @@ describe('[USER MODEL]', () => {
 
     it('should update user with valid data', () => {
 
-      const mockUser = createUser()
+      const mockUser = createMockUser()
 
       user = _.merge(user, mockUser)
 
@@ -117,7 +117,7 @@ describe('[USER MODEL]', () => {
 
       it('show throw error due to violating unique field ' + uniqueField, () => {
 
-        let mockUser = createUser(UserRole.User)
+        let mockUser = createMockUser(UserRole.User)
         user[uniqueField] = mockUser[uniqueField]
 
         user.save()
