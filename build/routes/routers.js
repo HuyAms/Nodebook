@@ -12,8 +12,11 @@ class Router {
     }
     setUpRouter() {
         const router = this.router;
+        //AUTH
         router.post('/login', this.authController.login);
+        //USER
         router.post('/user', this.userController.post);
+        router.get('/user', this.userController.get);
     }
 }
 exports.default = new Router().router;

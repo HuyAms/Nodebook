@@ -15,6 +15,13 @@ class UserService {
             });
         });
     }
+    static getUsers() {
+        return user_1.default.scope('withoutPassword').findAll().then((user) => {
+            return user;
+        }).catch(() => {
+            throw apiError_1.default.internalServerError();
+        });
+    }
 }
 exports.default = UserService;
 //# sourceMappingURL=userService.js.map

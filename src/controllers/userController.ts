@@ -12,4 +12,11 @@ export default class UserController {
       .catch(next)
   }
 
+  public get(req, res, next) {
+
+    UserService.getUsers()
+      .then(result => res.send(ResponseService.successResponse(result)))
+      .catch(next)
+  }
+
 }

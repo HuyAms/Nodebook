@@ -9,6 +9,11 @@ class UserController {
             .then(result => res.send(responseService_1.default.successResponse(result)))
             .catch(next);
     }
+    get(req, res, next) {
+        userService_1.default.getUsers()
+            .then(result => res.send(responseService_1.default.successResponse(result)))
+            .catch(next);
+    }
 }
 exports.default = UserController;
 //# sourceMappingURL=userController.js.map

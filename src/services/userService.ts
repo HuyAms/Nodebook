@@ -23,4 +23,16 @@ export default class UserService {
       })
     })
   }
+
+  static getUsers() {
+
+    return User.scope('withoutPassword').findAll().then((user: [User]) => {
+
+      return user
+
+    }).catch(() =>{
+
+      throw APIError.internalServerError()
+    })
+  }
 }
