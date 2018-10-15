@@ -5,9 +5,13 @@ import config from '../config/config'
 import * as Promise from 'bluebird'
 import * as passport from 'passport'
 import * as Local from 'passport-local'
+import * as _ from 'lodash'
 const LocalStrategy = Local.Strategy
-import {UserAttributes} from '../models/interface/userInterface';
-import APIError from "../util/apiError";
+import {UserAttributes} from '../models/interface/userInterface'
+import APIError from '../util/apiError'
+import {Permission, getPermission} from '../services/permission'
+
+const guard = require('express-jwt-permissions')()
 
 passport.use(new LocalStrategy((username, password, done) => {
 
@@ -29,30 +33,35 @@ passport.use(new LocalStrategy((username, password, done) => {
 
 export default class AuthService {
 
-  static verifyJwt(req, res, next) {
+  static verifyJwt() {
 
-    let checkToken = expressJwt({secret: config.secrets.jwt})
+    return (req, res, next) => {
 
-    let formattedToken;
-    //If found token in query then place it in the header
-    if (req.query && req.query.hasOwnProperty('access_token')) {
-      formattedToken = 'Bearer ' + req.query.access_token;
+      let checkToken = expressJwt({secret: config.secrets.jwt})
+
+      let formattedToken;
+      //If found token in query then place it in the header
+      if (req.query && req.query.hasOwnProperty('access_token')) {
+        formattedToken = 'Bearer ' + req.query.access_token;
+        req.headers.authorization = formattedToken;
+      }
+
+      formattedToken = 'Bearer ' +  req.headers.authorization;
       req.headers.authorization = formattedToken;
+
+      //call next if token is valid
+      //send error if token is invalid, then attached the decoded token to req.user
+      checkToken(req, res, next);
     }
-
-    formattedToken = 'Bearer ' +  req.headers.authorization;
-    req.headers.authorization = formattedToken;
-
-    //call next if token is valid
-    //send error if token is invalid, then attached the decoded token to req.user
-    checkToken(req, res, next);
   }
 
   static createToken(user: UserAttributes) {
 
+    const permissions = getPermission(user.role)
+
     const {secrets, expireTime} = config
 
-    return jwt.sign(user, secrets.jwt,  {expiresIn: expireTime})
+    return jwt.sign(_.merge(user, {permissions}), secrets.jwt,  {expiresIn: expireTime})
   }
 
   static login(req, res, next) {
@@ -90,5 +99,10 @@ export default class AuthService {
     }
 
     return AuthService.createToken(userAttribute)
+  }
+
+  static checkPermission(permissions: [Permission]) {
+
+    return guard.check(permissions)
   }
 }

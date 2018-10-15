@@ -1,6 +1,8 @@
 import * as express from 'express'
 import UserController from '../controllers/userController'
 import AuthController from '../controllers/authController'
+import AuthService from '../services/authService'
+import {Permission} from "../services/permission";
 
 class Router {
 
@@ -20,12 +22,20 @@ class Router {
 
     const router = this.router
 
+    const checkUserWithPermission = (permissions: [Permission]) => {
+
+      return [AuthService.verifyJwt(), AuthService.checkPermission(permissions)]
+    }
+
+    const writeUser = checkUserWithPermission([Permission.WriteUser])
+    const readUser = checkUserWithPermission([Permission.ReadUser])
+
     //AUTH
     router.post('/login', this.authController.login)
 
     //USER
     router.post('/user', this.userController.post)
-    router.get('/user', this.userController.get)
+    router.get('/user', readUser, this.userController.get)
   }
 }
 
