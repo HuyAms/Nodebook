@@ -9,6 +9,7 @@ const routers_1 = require("./routes/routers");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const responseService_1 = require("./services/responseService");
 const config_1 = require("./config/config");
+const swaggerUi = require("swagger-ui-express");
 class Server {
     constructor() {
         this.app = express();
@@ -25,6 +26,7 @@ class Server {
         this.app.use(cors());
     }
     routes() {
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('../swagger.json')));
         this.app.use('/api/', routers_1.default);
         //Handle Error
         this.app.use((err, req, res, next) => {

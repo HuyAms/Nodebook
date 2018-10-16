@@ -8,6 +8,7 @@ import {Sequelize} from 'sequelize-typescript'
 import responseService from "./services/responseService"
 import APIError from './util/apiError'
 import config from './config/config'
+import * as swaggerUi from 'swagger-ui-express'
 
 class Server {
 
@@ -35,6 +36,7 @@ class Server {
 
   private routes(): void {
 
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('../swagger.json')));
     this.app.use('/api/', router);
 
     //Handle Error

@@ -2,7 +2,7 @@ import * as express from 'express'
 import UserController from '../controllers/userController'
 import AuthController from '../controllers/authController'
 import AuthService from '../services/authService'
-import {Permission} from "../services/permission";
+import {Permission} from '../services/permission'
 
 class Router {
 
