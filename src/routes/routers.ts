@@ -36,6 +36,7 @@ class Router {
     //USER
     router.post('/user', this.userController.post)
     router.get('/user', readUser, this.userController.get)
+    router.delete('/user/:id', writeUser, this.userController.delete)
   }
 }
 

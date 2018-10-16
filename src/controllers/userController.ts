@@ -19,4 +19,10 @@ export default class UserController {
       .catch(next)
   }
 
+  public delete(req, res, next) {
+
+    UserService.deleteUser(req.params.id)
+      .then(result => res.send(ResponseService.successResponse(result)))
+      .catch(next)
+  }
 }
