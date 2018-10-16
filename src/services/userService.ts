@@ -23,4 +23,25 @@ export default class UserService {
       })
     })
   }
+
+  static getUsers() {
+
+    return User.scope('withoutPassword').findAll().then((user: [User]) => {
+
+      return user
+
+    }).catch(() => {
+
+      throw APIError.internalServerError()
+    })
+  }
+
+  static deleteUser(id: number) {
+
+    return User.scope('withoutPassword').findById(id).then(user => {
+      return user.destroy().then(() => user)
+        .catch(() => {throw APIError.internalServerError()})
+    }).then(user => user)
+      .catch(() =>{ throw APIError.badRequestError('Cannot find user with that id')})
+  }
 }

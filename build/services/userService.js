@@ -15,6 +15,20 @@ class UserService {
             });
         });
     }
+    static getUsers() {
+        return user_1.default.scope('withoutPassword').findAll().then((user) => {
+            return user;
+        }).catch(() => {
+            throw apiError_1.default.internalServerError();
+        });
+    }
+    static deleteUser(id) {
+        return user_1.default.scope('withoutPassword').findById(id).then(user => {
+            return user.destroy().then(() => user)
+                .catch(() => { throw apiError_1.default.internalServerError(); });
+        }).then(user => user)
+            .catch(() => { throw apiError_1.default.badRequestError('Cannot find user with that id'); });
+    }
 }
 exports.default = UserService;
 //# sourceMappingURL=userService.js.map

@@ -9,6 +9,7 @@ import {
   AllowNull,
   Unique,
   HasMany,
+  Scopes,
   DataType
 } from 'sequelize-typescript'
 import Notebook from "./notebook";
@@ -17,6 +18,12 @@ export enum UserRole {
   Admin = 'admin',
   User = 'user'
 }
+
+@Scopes({
+  withoutPassword: {
+    attributes: { exclude: ['password'] }
+  }
+})
 
 @Table({tableName: 'user', modelName: 'User', timestamps: true})
 export default class User extends Model<User> {
@@ -75,4 +82,5 @@ export default class User extends Model<User> {
       return bcrypt.hashSync(plainTextPword, salt);
     }
   }
+
 }

@@ -83,6 +83,11 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "notebooks", void 0);
 User = __decorate([
+    sequelize_typescript_1.Scopes({
+        withoutPassword: {
+            attributes: { exclude: ['password'] }
+        }
+    }),
     sequelize_typescript_1.Table({ tableName: 'user', modelName: 'User', timestamps: true })
 ], User);
 exports.default = User;

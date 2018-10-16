@@ -1,6 +1,6 @@
 import * as chai from 'chai'
 import * as dbUtil from "../util/db";
-import {createUser} from "../util/mock";
+import {createMockUser} from "../util/mock";
 import * as _ from 'lodash'
 import {UserRole} from "../../src/models/user";
 
@@ -10,17 +10,17 @@ const omitFields = ['id', 'password', 'createdAt', 'updatedAt']
 const requiredFields = ['username', 'firstName', 'lastName', 'email', 'role']
 const uniqueFields = ['username', 'email']
 
-describe('user model', () => {
+describe('[USER MODEL]', () => {
 
   before(done => {
     dbUtil.clearDB().finally(done)
   })
 
-  describe('create', () => {
+  describe('[CREATE]', () => {
 
     it('should create user with valid data', () => {
 
-      const mockUser = createUser(UserRole.User)
+      const mockUser = createMockUser(UserRole.User)
 
       return dbUtil.addUser(mockUser)
         .then(user => {
@@ -34,7 +34,7 @@ describe('user model', () => {
 
       it('show throw error due to creating user with missing field ' + missingField, () => {
 
-        let mockUser = createUser(UserRole.User)
+        let mockUser = createMockUser(UserRole.User)
         mockUser = _.omit(mockUser, missingField)
 
         return dbUtil.addUser(mockUser)
@@ -50,7 +50,7 @@ describe('user model', () => {
 
       it('show throw error due to violating unique field ' + uniqueField, () => {
 
-        let mockUser = createUser(UserRole.User)
+        let mockUser = createMockUser(UserRole.User)
 
         return dbUtil.addUser(mockUser)
           .then(user => {
@@ -67,13 +67,13 @@ describe('user model', () => {
     uniqueFields.forEach(testAddUniqueFields)
   })
 
-  describe('update', () => {
+  describe('[UPDATE]', () => {
 
     let user
 
     beforeEach(() => {
 
-      const mockUser = createUser()
+      const mockUser = createMockUser()
 
       return dbUtil.addUser(mockUser)
         .then(instance => user = instance)
@@ -85,7 +85,7 @@ describe('user model', () => {
 
     it('should update user with valid data', () => {
 
-      const mockUser = createUser()
+      const mockUser = createMockUser()
 
       user = _.merge(user, mockUser)
 
@@ -117,7 +117,7 @@ describe('user model', () => {
 
       it('show throw error due to violating unique field ' + uniqueField, () => {
 
-        let mockUser = createUser(UserRole.User)
+        let mockUser = createMockUser(UserRole.User)
         user[uniqueField] = mockUser[uniqueField]
 
         user.save()
