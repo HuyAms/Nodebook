@@ -99,7 +99,7 @@ describe('[USER API]', () => {
       dbUtil.clearDB()
     })
 
-    it('Expect return 200. Admin role deletes existing user', () => {
+    it('Expect 200. Admin role deletes existing user', () => {
 
       return chaiAgent.del('/api/user/' + testUser.id)
         .set('Authorization', testAdminToken)
@@ -108,7 +108,7 @@ describe('[USER API]', () => {
         })
     })
 
-    it('Expect return 404. Admin role delete non-existing user', () => {
+    it('Expect 404. Admin role delete non-existing user', () => {
 
       const nonExistingUserId = 1000
 
@@ -119,7 +119,7 @@ describe('[USER API]', () => {
         })
     })
 
-    it('Expect return 403. User role deletes user', () => {
+    it('Expect 403. User role deletes user', () => {
 
       return chaiAgent.del('/api/user/' + testUser.id)
         .set('Authorization', testToken)
@@ -128,7 +128,7 @@ describe('[USER API]', () => {
         })
     })
 
-    it('Expect return 401. Delete user without token', () => {
+    it('Expect 401. Delete user without token', () => {
 
       return chaiAgent.del('/api/user/' + testUser.id)
         .then(res => {
