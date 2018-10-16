@@ -12,7 +12,7 @@
 :white_check_mark:  Managing user role using [express-jwt-permissions](https://github.com/MichielDeMey/express-jwt-permissions) <br/>
 :white_check_mark:  Documentation using [Swagger](https://swagger.io/) <br/>
 :white_check_mark:  Test using [Mocha](https://mochajs.org/), [Chai](https://www.chaijs.com/)<br/>
-:white_check_mark:  Usage of libraries: [sequelize-typescript](https://github.com/RobinBuschmann/sequelize-typescript), [db-migrate](https://github.com/db-migrate/node-db-migrate)<br/>
+:white_check_mark:  Usage of libraries: [sequelize](http://docs.sequelizejs.com/), [sequelize-typescript](https://github.com/RobinBuschmann/sequelize-typescript), [db-migrate](https://github.com/db-migrate/node-db-migrate)<br/>
 
 ## TODO list:
 :white_large_square: CRUD note route <br/>
