@@ -15,6 +15,9 @@ class UserController {
             .catch(next);
     }
     delete(req, res, next) {
+        userService_1.default.deleteUser(req.params.id)
+            .then(result => res.send(responseService_1.default.successResponse(result)))
+            .catch(next);
     }
 }
 exports.default = UserController;

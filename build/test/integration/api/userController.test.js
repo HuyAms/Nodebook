@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
-const chaiHttp = require("chai-http");
 const mock_1 = require("../../util/mock");
 const dbUtil = require("../../util/db");
 const common_1 = require("../../util/common");
 const user_1 = require("../../../src/models/user");
 const _ = require("lodash");
 const userService_1 = require("../../../src/services/userService");
+const chaiHttp = require("chai-http");
+const Promise = require("bluebird");
 const httpStatus = require('http-status');
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -16,17 +17,12 @@ const requiredFields = ['username', 'firstName', 'lastName', 'email', 'role'];
 describe('[USER API]', () => {
     let testUser;
     let testPassword;
-    beforeEach(function () {
-        const mockUser = mock_1.createMockUser();
-        testPassword = mockUser.password;
-        return dbUtil.addUser(mockUser)
-            .then(user => { testUser = user; });
-    });
-    afterEach(function () {
-        dbUtil.clearDB();
-    });
+    let testToken;
+    let testAdminUser;
+    let testAdminPassword;
+    let testAdminToken;
     describe('POST /api/user', () => {
-        it('Send user fields. Expect return 200 with token', () => {
+        it('Expect 200 with token. Create user with all required fields', () => {
             const mockUser = mock_1.createMockUser();
             return chaiAgent.post('/api/user')
                 .send(mockUser)
@@ -37,7 +33,7 @@ describe('[USER API]', () => {
             });
         });
         function testMissingFields(missingField) {
-            it('Send user with missing required fields  ' + missingField + '. Expect return status 400 with error message', () => {
+            it('Expect 400 with error message. Create user with missing required fields  ' + missingField, () => {
                 let mockUser = mock_1.createMockUser(user_1.UserRole.User);
                 mockUser = _.omit(mockUser, missingField);
                 return chaiAgent.post('/api/user')
@@ -53,6 +49,55 @@ describe('[USER API]', () => {
             });
         }
         requiredFields.forEach(testMissingFields);
+    });
+    describe('DELETE /api/user/:id', () => {
+        beforeEach(function () {
+            const mockUser = mock_1.createMockUser(user_1.UserRole.User);
+            testPassword = mockUser.password;
+            const mockAdminUser = mock_1.createMockUser(user_1.UserRole.Admin);
+            testAdminPassword = mockAdminUser.password;
+            return Promise.all([dbUtil.addUser(mockUser), dbUtil.addUser(mockAdminUser)])
+                .then(users => {
+                testUser = users[0];
+                testToken = common_1.createTokenFromUser(testUser.toJSON());
+                testAdminUser = users[1];
+                testAdminToken = common_1.createTokenFromUser(testAdminUser.toJSON());
+            })
+                .catch(error => {
+                console.log(error);
+            });
+        });
+        afterEach(function () {
+            dbUtil.clearDB();
+        });
+        it('Expect return 200. Admin role deletes existing user', () => {
+            return chaiAgent.del('/api/user/' + testUser.id)
+                .set('Authorization', testAdminToken)
+                .then(res => {
+                expect(res).to.have.status(httpStatus.OK);
+            });
+        });
+        it('Expect return 404. Admin role delete non-existing user', () => {
+            const nonExistingUserId = 1000;
+            return chaiAgent.del('/api/user/' + nonExistingUserId)
+                .set('Authorization', testAdminToken)
+                .then(res => {
+                expect(res).to.have.status(httpStatus.NOT_FOUND);
+            });
+        });
+        it('Expect return 403. User role deletes user', () => {
+            return chaiAgent.del('/api/user/' + testUser.id)
+                .set('Authorization', testToken)
+                .then(res => {
+                expect(res).to.have.status(httpStatus.FORBIDDEN);
+            });
+        });
+        it('Expect return 401. Delete user without token', () => {
+            return chaiAgent.del('/api/user/' + testUser.id)
+                .then(res => {
+                expect(res).to.have.status(httpStatus.UNAUTHORIZED);
+            });
+        });
     });
 });
 //# sourceMappingURL=userController.test.js.map

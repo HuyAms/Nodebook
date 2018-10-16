@@ -22,11 +22,12 @@ class UserService {
             throw apiError_1.default.internalServerError();
         });
     }
-    static deleteUsers(id) {
-        return user_1.default.destroy({ where: { id: id } }).then(user => user)
-            .catch(() => {
-            throw apiError_1.default.internalServerError();
-        });
+    static deleteUser(id) {
+        return user_1.default.scope('withoutPassword').findById(id).then(user => {
+            return user.destroy().then(() => user)
+                .catch(() => { throw apiError_1.default.internalServerError(); });
+        }).then(user => user)
+            .catch(() => { throw apiError_1.default.notFoundError(apiError_1.ErrorMessage.USER_NOT_FOUND); });
     }
 }
 exports.default = UserService;

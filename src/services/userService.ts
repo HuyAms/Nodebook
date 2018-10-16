@@ -2,7 +2,7 @@ import * as Promise from 'bluebird';
 import {CreateUserParams, TokenAttributes} from '../models/interface/userInterface';
 import User from '../models/user';
 import {sequelize} from '../server';
-import APIError from "../util/apiError";
+import APIError, {ErrorMessage} from "../util/apiError";
 import AuthService from './authService';
 
 export default class UserService {
@@ -42,6 +42,6 @@ export default class UserService {
       return user.destroy().then(() => user)
         .catch(() => {throw APIError.internalServerError()})
     }).then(user => user)
-      .catch(() =>{ throw APIError.badRequestError('Cannot find user with that id')})
+      .catch(() =>{ throw APIError.notFoundError(ErrorMessage.USER_NOT_FOUND)})
   }
 }

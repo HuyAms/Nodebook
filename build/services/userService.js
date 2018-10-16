@@ -27,7 +27,7 @@ class UserService {
             return user.destroy().then(() => user)
                 .catch(() => { throw apiError_1.default.internalServerError(); });
         }).then(user => user)
-            .catch(() => { throw apiError_1.default.badRequestError('Cannot find user with that id'); });
+            .catch(() => { throw apiError_1.default.notFoundError(apiError_1.ErrorMessage.USER_NOT_FOUND); });
     }
 }
 exports.default = UserService;

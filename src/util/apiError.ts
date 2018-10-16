@@ -1,5 +1,18 @@
 const httpStatus = require('http-status');
 
+export enum ErrorMessage {
+
+  //default error message
+  BAD_REQUEST = 'Invalid params',
+  UNAUTHORIZED = 'Unauthorize',
+  NOT_FOUND = 'Not found',
+  UNSUPPORTED_MEDIA_TYPE = 'Invalid media type',
+
+  //error messsage
+  USER_NOT_FOUND = 'Cannot find user with that id',
+
+}
+
 export default class APIError extends Error {
   status: number
   message: string
@@ -15,23 +28,23 @@ export default class APIError extends Error {
   }
 
   /*Code 400*/
-  static badRequestError(message = 'Invalid params'): APIError {
+  static badRequestError(message = ErrorMessage.BAD_REQUEST): APIError {
     return new APIError(message, httpStatus.BAD_REQUEST);
   }
 
   /*Code 401*/
-  static unauthorizedError(message = 'Unauthorize'): APIError {
+  static unauthorizedError(message = ErrorMessage.UNAUTHORIZED): APIError {
     return new APIError(message, httpStatus.UNAUTHORIZED);
   }
 
 
   /*Code 404*/
-  static notFoundError(message = 'Not found'): APIError {
+  static notFoundError(message = ErrorMessage.NOT_FOUND): APIError {
     return new APIError(message, httpStatus.NOT_FOUND);
   }
 
   /*Code 415*/
-  static unsupportedMediaTypeError(message = 'Invalid photo type'): APIError {
+  static unsupportedMediaTypeError(message = ErrorMessage.UNSUPPORTED_MEDIA_TYPE): APIError {
     return new APIError(message, httpStatus.UNSUPPORTED_MEDIA_TYPE);
   }
 
